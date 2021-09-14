@@ -20,4 +20,4 @@ If you were to put a non-checksummed for wrapped ether 0xc02aaa39b223fe8d0a0e5c4
 
 # Invalidating cache
 
-cld uploader explicit "https://raw.githubusercontent.com/sushiswap/icons/master/token/time.jpg" type="fetch" invalidate="true" eager='[{ "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'
+cld uploader explicit "https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg" type="fetch" invalidate="true" eager='[{ "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'
