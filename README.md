@@ -17,3 +17,7 @@ If you were to put a non-checksummed for wrapped ether 0xc02aaa39b223fe8d0a0e5c4
 1. If adding a token logo for a network which does not yet exist, add a new folder for the network in the root of this repository. e.g. ethereum
 
 2. Using wrapped ether as an example, you would add this to the etheruem folder, and it should be named by the token address, and extension should be jpg. e.g. 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.jpg
+
+# Invalidating cache
+
+cld uploader explicit "https://raw.githubusercontent.com/sushiswap/icons/master/token/time.jpg" type="fetch" invalidate="true" eager='[{ "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'
