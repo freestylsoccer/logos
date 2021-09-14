@@ -14,7 +14,7 @@ If you were to put a non-checksummed for wrapped ether 0xc02aaa39b223fe8d0a0e5c4
 
 # Adding a token logo
 
-1. If adding a token logo for a network which does not yet exist, add a new folder for the network in the root of this repository. e.g. ethereum
+1. If adding a token logo for a network which does not yet exist, add a new folder named afer the network in the network folder of this repository. e.g. ethereum
 
 2. Using wrapped ether as an example, you would add this to the etheruem folder, and it should be named by the token address, and extension should be jpg. e.g. 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.jpg
 
