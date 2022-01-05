@@ -18,14 +18,14 @@ If you were to put a non-checksummed for wrapped ether 0xc02aaa39b223fe8d0a0e5c4
 
 2. Using wrapped ether as an example, you would add this to the etheruem folder, and it should be named by the token address, and extension should be jpg. e.g. 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.jpg
 
-# Clear cache for one network by network name
+# Clear cache of all tokens on one network by network name
 
 node . clear:network arbitrum
 
-# Clear cache for one network by chainId
+# Clear cache of all tokens for one network by chainId
 
 node . clear:network 250
 
-# Clear cache for all networks
+# Clear cache of all tokens of all networks
 
 node . clear:all
