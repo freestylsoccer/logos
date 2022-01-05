@@ -50,15 +50,15 @@ program.command("clear:all").action(() => {
 
         fs.readdir(path, (error, files) => {
           if (error) console.error(error);
-          for (const token in files) {
+          for (const token of files) {
             console.log(
-              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/binance/${token}.jpg`
+              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/${token}`
             );
             exec(
-              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/binance/${token}.jpg" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
+              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
               () =>
                 console.log(
-                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/binance/${token}.jpg`
+                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/${token}`
                 )
             );
           }
@@ -96,15 +96,15 @@ program
 
         fs.readdir(path, (error, files) => {
           if (error) console.error(error);
-          for (const token in files) {
+          for (const token of files) {
             console.log(
-              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[network]}/binance/${token}.jpg`
+              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK[network]}/${token}`
             );
             exec(
-              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[network]}/binance/${token}.jpg" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
+              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK[network]}/${token}" type="fetch" invalidate="true" overwrite="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
               () =>
                 console.log(
-                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[network]}/binance/${token}.jpg`
+                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK[network]}/${token}`
                 )
             );
           }
