@@ -4,7 +4,26 @@ const { ChainId } = require("@sushiswap/core-sdk");
 
 const program = new Command();
 
-const NETWORK = {
+const NAME_TO_CHAIN_ID = {
+  arbitrum: ChainId.ARBITRUM,
+  avalanche: ChainId.AVALANCHE,
+  fuji: ChainId.AVALANCHE_TESTNET,
+  binance: ChainId.BSC,
+  celo: ChainId.CELO,
+  ethereum: ChainId.ETHEREUM,
+  fantom: ChainId.FANTOM,
+  fuse: ChainId.FUSE,
+  harmony: ChainId.HARMONY,
+  heco: ChainId.HECO,
+  matic: ChainId.MATIC,
+  moonriver: ChainId.MOONRIVER,
+  okex: ChainId.OKEX,
+  palm: ChainId.PALM,
+  telos: ChainId.TELOS,
+  xdai: ChainId.XDAI,
+};
+
+const CHAIN_ID_TO_NAME = {
   [ChainId.ARBITRUM]: "arbitrum",
   [ChainId.AVALANCHE]: "avalanche",
   [ChainId.AVALANCHE_TESTNET]: "fuji",
@@ -91,9 +110,14 @@ program
           throw Error(`No network configured for ${network}`);
         }
 
-        console.log(`Clearing cache for network ${NETWORK[network]}`);
+        const NETWORK =
+          Number(network) in CHAIN_ID_TO_NAME
+            ? CHAIN_ID_TO_NAME[network]
+            : network;
 
-        const path = resolve(__dirname, `../network/${NETWORK[network]}`);
+        console.log(`Clearing cache for network ${NETWORK}`);
+
+        const path = resolve(__dirname, `../network/${NETWORK}`);
 
         if (!fs.existsSync(path)) {
           throw Error(`Path does not exist for ${path}`);
@@ -103,13 +127,13 @@ program
           if (error) console.error(error);
           for (const token of files) {
             console.log(
-              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK[network]}/${token}`
+              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
             );
             exec(
-              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK[network]}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 54 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
+              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 54 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
               () =>
                 console.log(
-                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK[network]}/${token}`
+                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
                 )
             );
           }
