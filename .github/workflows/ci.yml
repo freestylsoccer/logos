@@ -16,7 +16,7 @@ jobs:
           node-version: '16.x'
       - run: yarn
   test:
-      - run: yarn test
+    - run: yarn test
   # TODO: Fix, this is not ideal, it will clear cache each time
   clear:
       - run: node . clear:all
