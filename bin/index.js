@@ -23,6 +23,11 @@ const NETWORK = {
   [ChainId.XDAI]: "xdai",
 };
 
+// TODO: #8 Add network and agnostic clone command to bin/index.js which
+// will for example clone
+// from token/eth.jpg
+// to network/arbitrum/0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f.jpg
+
 program.command("clear:all").action(() => {
   console.log("clear command called");
 
