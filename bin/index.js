@@ -54,66 +54,56 @@ program
   .arguments("<name> <network> <address>")
   .action((name, network, address) => {
     if (!network in NAME_TO_CHAIN_ID) {
-      console.warn("No network");
-      return;
+      throw Error(`No network for ${network}`);
     }
 
     const from = resolve(__dirname, `../token/${name}.jpg`);
 
     if (!fs.existsSync(from)) {
-      console.warn(`No token found with name ${name} at path ${path}`);
-      return;
+      throw Error(`No token found with name ${name} at path ${path}`);
     }
 
-    const to = resolve(__dirname, `../network/${network}/${address}.jpg`);
+    const to = resolve(
+      __dirname,
+      `../network/${network}/${getAddress(address)}.jpg`
+    );
 
     exec(`cp ${from} ${to}`, () => console.log(`Copied ${from} -> ${to}`));
   });
 
 program.command("clear:all").action(() => {
   console.log("clear command called");
-
-  (async () => {
-    try {
-      for (const chainId of Object.keys(ChainId)) {
-        if (!CHAIN_ID_TO_NAME[chainId]) {
-          console.warn("No network configured for chainId " + chainId);
-          continue;
-        }
-
-        console.log(`Clearing cache for network ${CHAIN_ID_TO_NAME[chainId]}`);
-
-        const path = resolve(
-          __dirname,
-          `../network/${CHAIN_ID_TO_NAME[chainId]}`
-        );
-
-        console.log({ path });
-
-        if (!fs.existsSync(path)) {
-          continue;
-        }
-
-        fs.readdir(path, (error, files) => {
-          if (error) console.error(error);
-          for (const token of files) {
-            console.log(
-              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
-            );
-            exec(
-              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
-              () =>
-                console.log(
-                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
-                )
-            );
-          }
-        });
-      }
-    } catch (error) {
-      console.error(error);
+  for (const chainId of Object.keys(ChainId)) {
+    if (!CHAIN_ID_TO_NAME[chainId]) {
+      throw Error(`No name to map from chainId ${chainId}`);
     }
-  })();
+
+    console.log(`Clearing cache for network ${CHAIN_ID_TO_NAME[chainId]}`);
+
+    const path = resolve(__dirname, `../network/${CHAIN_ID_TO_NAME[chainId]}`);
+
+    console.log({ path });
+
+    if (!fs.existsSync(path)) {
+      throw Error(`No network found for path ${path}`);
+    }
+
+    fs.readdir(path, (error, files) => {
+      if (error) console.error(error);
+      for (const token of files) {
+        console.log(
+          `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
+        );
+        exec(
+          `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
+          () =>
+            console.log(
+              `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
+            )
+        );
+      }
+    });
+  }
 });
 
 program
@@ -122,44 +112,36 @@ program
   .action((network) => {
     console.log("clear:network command called", { network });
 
-    (async () => {
-      try {
-        if (!network) {
-          throw Error(`No network configured for ${network}`);
-        }
+    if (!network) {
+      throw Error(`No network configured for ${network}`);
+    }
 
-        const NETWORK =
-          Number(network) in CHAIN_ID_TO_NAME
-            ? CHAIN_ID_TO_NAME[network]
-            : network;
+    const NETWORK =
+      Number(network) in CHAIN_ID_TO_NAME ? CHAIN_ID_TO_NAME[network] : network;
 
-        console.log(`Clearing cache for network ${NETWORK}`);
+    console.log(`Clearing cache for network ${NETWORK}`);
 
-        const path = resolve(__dirname, `../network/${NETWORK}`);
+    const path = resolve(__dirname, `../network/${NETWORK}`);
 
-        if (!fs.existsSync(path)) {
-          throw Error(`Path does not exist for ${path}`);
-        }
+    if (!fs.existsSync(path)) {
+      throw Error(`Path does not exist for ${path}`);
+    }
 
-        fs.readdir(path, (error, files) => {
-          if (error) console.error(error);
-          for (const token of files) {
+    fs.readdir(path, (error, files) => {
+      if (error) console.error(error);
+      for (const token of files) {
+        console.log(
+          `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
+        );
+        exec(
+          `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 54 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
+          () =>
             console.log(
-              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
-            );
-            exec(
-              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 54 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
-              () =>
-                console.log(
-                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
-                )
-            );
-          }
-        });
-      } catch (error) {
-        console.error(error);
+              `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
+            )
+        );
       }
-    })();
+    });
   });
 
 program.parse(process.argv);
