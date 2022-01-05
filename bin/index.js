@@ -75,15 +75,18 @@ program.command("clear:all").action(() => {
 
   (async () => {
     try {
-      for (const key of Object.keys(ChainId)) {
-        if (!NETWORK[key]) {
-          console.warn("No network configured for chainId " + key);
+      for (const chainId of Object.keys(ChainId)) {
+        if (!CHAIN_ID_TO_NAME[chainId]) {
+          console.warn("No network configured for chainId " + chainId);
           continue;
         }
 
-        console.log(`Clearing cache for network ${NETWORK[key]}`);
+        console.log(`Clearing cache for network ${CHAIN_ID_TO_NAME[chainId]}`);
 
-        const path = resolve(__dirname, `../network/${NETWORK[key]}`);
+        const path = resolve(
+          __dirname,
+          `../network/${CHAIN_ID_TO_NAME[chainId]}`
+        );
 
         console.log({ path });
 
@@ -95,13 +98,13 @@ program.command("clear:all").action(() => {
           if (error) console.error(error);
           for (const token of files) {
             console.log(
-              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/${token}`
+              `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
             );
             exec(
-              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
+              `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
               () =>
                 console.log(
-                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${NETWORK[key]}/${token}`
+                  `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
                 )
             );
           }
