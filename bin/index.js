@@ -13,6 +13,10 @@ const NAME_TO_CHAIN_ID = {
   binance: ChainId.BSC,
   celo: ChainId.CELO,
   ethereum: ChainId.ETHEREUM,
+  ropsten: [ChainId.ROPSTEN],
+  rinkeby: [ChainId.RINKEBY],
+  kovan: [ChainId.KOVAN],
+  gorli: [ChainId.GÖRLI],
   fantom: ChainId.FANTOM,
   fuse: ChainId.FUSE,
   harmony: ChainId.HARMONY,
@@ -32,6 +36,10 @@ const CHAIN_ID_TO_NAME = {
   [ChainId.BSC]: "binance",
   [ChainId.CELO]: "celo",
   [ChainId.ETHEREUM]: "ethereum",
+  [ChainId.ROPSTEN]: "ropsten",
+  [ChainId.RINKEBY]: "rinkeby",
+  [ChainId.KOVAN]: "kovan",
+  [ChainId.GÖRLI]: "gorli",
   [ChainId.FANTOM]: "fantom",
   [ChainId.FUSE]: "fuse",
   [ChainId.HARMONY]: "harmony",
@@ -53,7 +61,7 @@ program
   .command("clone")
   .arguments("<name> <network> <address>")
   .action((name, network, address) => {
-    if (!network in NAME_TO_CHAIN_ID) {
+    if (!(network in NAME_TO_CHAIN_ID)) {
       throw Error(`No network for ${network}`);
     }
 
@@ -74,8 +82,11 @@ program
 program.command("clear:all").action(() => {
   console.log("clear command called");
   for (const chainId of Object.keys(ChainId)) {
-    if (!CHAIN_ID_TO_NAME[chainId]) {
-      throw Error(`No name to map from chainId ${chainId}`);
+    if (!(chainId in CHAIN_ID_TO_NAME)) {
+      console.error(
+        `No name to map from chainId: ${chainId} -> name: ${CHAIN_ID_TO_NAME[chainId]}`
+      );
+      continue;
     }
 
     console.log(`Clearing cache for network ${CHAIN_ID_TO_NAME[chainId]}`);
@@ -85,7 +96,8 @@ program.command("clear:all").action(() => {
     console.log({ path });
 
     if (!fs.existsSync(path)) {
-      throw Error(`No network found for path ${path}`);
+      console.error(`No network found for path ${path}`);
+      continue;
     }
 
     fs.readdir(path, (error, files) => {
