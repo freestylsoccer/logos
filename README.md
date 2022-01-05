@@ -20,6 +20,6 @@ If you were to put a non-checksummed for wrapped ether 0xc02aaa39b223fe8d0a0e5c4
 
 # Invalidating cache
 
-cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/moonriver/0x4a436073552044D5f2f49B176853ad3Ad473d9d6.jpg" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'
+cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/binance/0x66eFF5221ca926636224650Fd3B9c497FF828F7D.jpg" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'
 
 
