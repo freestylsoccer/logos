@@ -1,6 +1,8 @@
 const { Command } = require("commander");
 const { exec } = require("child_process");
 const { ChainId } = require("@sushiswap/core-sdk");
+const fs = require("fs");
+const { resolve } = require("path");
 
 const program = new Command();
 
@@ -47,12 +49,29 @@ const CHAIN_ID_TO_NAME = {
 // from token/eth.jpg
 // to network/arbitrum/0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f.jpg
 
+program
+  .command("clone")
+  .arguments("<name> <network> <address>")
+  .action((name, network, address) => {
+    if (!network in NAME_TO_CHAIN_ID) {
+      console.warn("No network");
+      return;
+    }
+
+    const from = resolve(__dirname, `../token/${name}.jpg`);
+
+    if (!fs.existsSync(from)) {
+      console.warn(`No token found with name ${name} at path ${path}`);
+      return;
+    }
+
+    const to = resolve(__dirname, `../network/${network}/${address}.jpg`);
+
+    exec(`cp ${from} ${to}`, () => console.log(`Copied ${from} -> ${to}`));
+  });
+
 program.command("clear:all").action(() => {
   console.log("clear command called");
-
-  const fs = require("fs");
-
-  const { resolve } = require("path");
 
   (async () => {
     try {
@@ -99,10 +118,6 @@ program
   .arguments("<network>")
   .action((network) => {
     console.log("clear:network command called", { network });
-
-    const fs = require("fs");
-
-    const { resolve } = require("path");
 
     (async () => {
       try {

@@ -29,3 +29,7 @@ node . clear:network 250
 # Clear cache of all tokens of all networks
 
 node . clear:all
+
+# Clone token to network
+
+node . clone gno xdai 0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb
