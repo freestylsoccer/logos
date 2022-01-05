@@ -6,7 +6,7 @@ on:
     branches:
       - main
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,8 +15,5 @@ jobs:
         with:
           node-version: '16.x'
       - run: yarn
-  test:
-    - run: yarn test
-  # TODO: Fix, this is not ideal, it will clear cache each time
-  clear:
+      - run: yarn test
       - run: node . clear:all
