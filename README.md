@@ -18,17 +18,21 @@ If you were to put a non-checksummed for wrapped ether 0xc02aaa39b223fe8d0a0e5c4
 
 2. Using wrapped ether as an example, you would add this to the etheruem folder, and it should be named by the token address, and extension should be jpg. e.g. 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.jpg
 
-# Clear cache of all tokens on one network by network name
+# Invalidate cache of a single token
 
-node . clear:network arbitrum
+node . invalidate:token xdai 0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb 
 
-# Clear cache of all tokens for one network by chainId
+# Invalidate cache of all tokens on one network by network name
 
-node . clear:network 250
+node . invalidate:network arbitrum
 
-# Clear cache of all tokens of all networks
+# Invalidate cache of all tokens for one network by chainId
 
-node . clear:all
+node . invalidate:network 250
+
+# Invalidate cache of all tokens of all networks
+
+node . invalidate:all
 
 # Clone token to network
 

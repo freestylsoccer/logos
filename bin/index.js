@@ -84,8 +84,8 @@ program
     exec(`cp ${from} ${to}`, () => console.log(`Copied ${from} -> ${to}`));
   });
 
-program.command("clear:all").action(() => {
-  console.log("clear command called");
+program.command("invalidate:all").action(() => {
+  console.log("invalidate:all command called");
   for (const chainId of Object.keys(ChainId)) {
     if (!(chainId in CHAIN_ID_TO_NAME)) {
       console.error(
@@ -94,7 +94,7 @@ program.command("clear:all").action(() => {
       continue;
     }
 
-    console.log(`Clearing cache for network ${CHAIN_ID_TO_NAME[chainId]}`);
+    console.log(`Invalidate cache for network ${CHAIN_ID_TO_NAME[chainId]}`);
 
     const path = resolve(__dirname, `../network/${CHAIN_ID_TO_NAME[chainId]}`);
 
@@ -109,13 +109,13 @@ program.command("clear:all").action(() => {
       if (error) console.error(error);
       for (const token of files) {
         console.log(
-          `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
+          `Invalidating https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
         );
         exec(
           `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
           () =>
             console.log(
-              `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
+              `Invalidated https://raw.githubusercontent.com/sushiswap/logos/main/${CHAIN_ID_TO_NAME[chainId]}/${token}`
             )
         );
       }
@@ -124,10 +124,10 @@ program.command("clear:all").action(() => {
 });
 
 program
-  .command("clear:network")
+  .command("invalidate:network")
   .arguments("<network>")
   .action((network) => {
-    console.log("clear:network command called", { network });
+    console.log("invalidate:network command called", { network });
 
     if (!network) {
       throw Error(`No network configured for ${network}`);
@@ -136,7 +136,7 @@ program
     const NETWORK =
       Number(network) in CHAIN_ID_TO_NAME ? CHAIN_ID_TO_NAME[network] : network;
 
-    console.log(`Clearing cache for network ${NETWORK}`);
+    console.log(`Invalidating cache for network ${NETWORK}`);
 
     const path = resolve(__dirname, `../network/${NETWORK}`);
 
@@ -148,17 +148,61 @@ program
       if (error) console.error(error);
       for (const token of files) {
         console.log(
-          `Clearing https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
+          `Invalidating https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
         );
         exec(
           `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 54 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
           () =>
             console.log(
-              `CLEARED https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
+              `Invalidated https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}`
             )
         );
       }
     });
+  });
+
+program
+  .command("invalidate:token")
+  .arguments("<network> <token>")
+  .action((network, token) => {
+    console.log("invalidate:token command called", { network, token });
+
+    if (!network) {
+      throw Error("No network was passed");
+    }
+
+    if (!token) {
+      throw Error("No token was passed");
+    }
+
+    const NETWORK =
+      Number(network) in CHAIN_ID_TO_NAME ? CHAIN_ID_TO_NAME[network] : network;
+
+    console.log(`Invalidate cache for network ${NETWORK} and token ${token}`);
+
+    const path = resolve(__dirname, `../network/${NETWORK}/${token}.jpg`);
+
+    if (!fs.existsSync(path)) {
+      throw Error(`Path does not exist for ${path}`);
+    }
+
+    console.log(
+      `Invalidating https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}.jpg`
+    );
+
+    exec(
+      `/usr/local/bin/cld uploader explicit "https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}.jpg" type="fetch" invalidate="true" eager='[{ "width": 24 }, { "width": 32 }, { "width": 48 }, { "width": 54 }, { "width": 64 }, { "width": 96 }, { "width": 128 }]'`,
+      (error, stdout) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log(stdout);
+          console.log(
+            `Invalidated https://raw.githubusercontent.com/sushiswap/logos/main/network/${NETWORK}/${token}.jpg`
+          );
+        }
+      }
+    );
   });
 
 program.parse(process.argv);
