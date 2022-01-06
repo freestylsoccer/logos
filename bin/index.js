@@ -3,6 +3,7 @@ const { exec } = require("child_process");
 const { ChainId } = require("@sushiswap/core-sdk");
 const fs = require("fs");
 const { resolve } = require("path");
+const { getAddress } = require("@ethersproject/address");
 
 const program = new Command();
 
@@ -61,6 +62,10 @@ program
   .command("clone")
   .arguments("<name> <network> <address>")
   .action((name, network, address) => {
+    console.log(
+      `Performing clone of ${name}.jpg from the tokens directory to network/${network}/${address}.jpg`
+    );
+
     if (!(network in NAME_TO_CHAIN_ID)) {
       throw Error(`No network for ${network}`);
     }
